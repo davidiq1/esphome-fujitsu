@@ -8,11 +8,11 @@ DEPENDENCIES = ['uart']
 fujitsu_ns = cg.esphome_ns.namespace('fujitsu')
 FujitsuClimate = fujitsu_ns.class_('FujitsuClimate', climate.Climate, cg.Component)
 
-# Forma más compatible de definir el esquema en 2024/2025
-CONFIG_SCHEMA = climate.CLIMATE_SCHEMA.extend(
-    {
+# ESTA ES LA LINEA CLAVE PARA ESPHOME 2025
+CONFIG_SCHEMA = climate.climate_schema(FujitsuClimate).extend(
+    cv.Schema({
         cv.GenerateID(): cv.declare_id(FujitsuClimate),
-    }
+    })
 ).extend(uart.UART_DEVICE_SCHEMA).extend(cv.COMPONENT_SCHEMA)
 
 def to_code(config):
@@ -21,5 +21,4 @@ def to_code(config):
     yield climate.register_climate(var, config)
     yield uart.register_uart_device(var, config)
     
-    # Esto incluye los archivos C++
     cg.add_sources("FujiHeatPump.cpp", "FujitsuClimate.cpp")
