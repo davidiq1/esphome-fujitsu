@@ -1,0 +1,39 @@
+esphome:
+  name: climatizadorsalon
+  friendly_name: ClimatizadorSalon
+  min_version: 2025.12.3
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+api:
+  encryption:
+    key: "x0rfAPPSwW3+Ecauqjt7kj+TAt9E5WzCHrxP9pResqo="
+
+ota:
+  - platform: esphome
+    password: "f1f4935d89713e48ab94d3f2d5003cab"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# ---- AÑADIDO: logs (recomendado para depurar) ----
+logger:
+  level: DEBUG
+
+# ---- AÑADIDO: external component local ----
+external_components:
+  - source:
+      type: local
+      path: components
+    components: [fujitsu_uart]
+
+climate:
+  - platform: fujitsu_uart
+    name: "Climatizador Salon"
+    id: climatizador_salon
+    rx_pin: 1
+    tx_pin: 0
